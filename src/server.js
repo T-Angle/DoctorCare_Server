@@ -5,6 +5,9 @@ import initWebRoutes from './routes/web';
 import connectDB from "./config/connectDB";
 import cors from "cors";
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger.json';
+
 require('dotenv').config();
 
 let app = express();
@@ -13,6 +16,8 @@ let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors({ origin: true }));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 viewEngine(app);
 initWebRoutes(app);
