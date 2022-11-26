@@ -1,0 +1,19 @@
+
+POST http://localhost:8080/api/v1/admin/auth/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "123456"
+}
+
+###
+GET http://localhost:8080/api/v1/admin/auth/logout HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNTIzNjA1MDMzYzVkMWU0NDU2YTc1YSIsImlhdCI6MTY2Nzk2NTUxMCwiZXhwIjoxNjcwNTU3NTEwfQ.rd7nXJ1WT-kLCYczlGLMEX4uKEuSjNPYNYxIxOXFXN8
+
+{
+  "name": "Admin SYS",
+  "email": "admin@gmail.com",
+  "password": "123456"
+}
