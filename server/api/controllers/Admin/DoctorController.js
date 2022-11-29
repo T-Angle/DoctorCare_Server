@@ -1,4 +1,5 @@
 const Doctor = require('../../../models/Doctor')
+const Admin = require('../../../models/Admin')
 const hostURL = require('../../utils/url')
 const checkId = require('../../middleware/CheckId')
 
@@ -31,6 +32,61 @@ const Index = async (req, res, next) => {
 }
 
 
+const DeleteAdmin  = async (req, res, next) => {
+    const id = req.params.id
+    try {
+        let admin = await Admin.findByIdAndRemove(id).exec()
+        res.status(200).json({success: true})
+
+    } catch (error) {
+        if (error) next(error)
+    }
+}
+
+const UpdateInfoAdmin = async (req, res, next) => {
+    try {
+        const id =  req.params.id;
+        const updateObject  =  req.body;
+        await Admin.updateOne(
+            { _id: id },
+            { $set: updateObject },
+        )
+            .exec()
+
+        res.status(201).json({ status: true, message: `Successfully` })
+
+    } catch (error) {
+        if (error) next(error)
+    }
+}
+
+const DeleteDoctor  = async (req, res, next) => {
+    const id = req.params.id
+    try {
+        let doctor = await Doctor.findByIdAndRemove(id).exec()
+        res.status(200).json({success: true})
+
+    } catch (error) {
+        if (error) next(error)
+    }
+}
+
+const UpdateInfoDoctor = async (req, res, next) => {
+    try {
+        const id =  req.params.id;
+        const updateObject  =  req.body;
+        await Doctor.updateOne(
+            { _id: id },
+            { $set: updateObject },
+        )
+            .exec()
+
+        res.status(201).json({ status: true, message: `Successfully` })
+
+    } catch (error) {
+        if (error) next(error)
+    }
+}
 // Show individual doctor
 const Show = async (req, res, next) => {
     try {
@@ -83,5 +139,9 @@ const UpdateStatus = async (req, res, next) => {
 module.exports = {
     Index,
     Show,
-    UpdateStatus
+    UpdateStatus,
+    DeleteAdmin,
+    UpdateInfoAdmin,
+    DeleteDoctor,
+    UpdateInfoDoctor
 }
