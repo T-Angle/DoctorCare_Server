@@ -66,9 +66,48 @@
               }
           }
       },
-      "/auth/register":{
+      "/admin/login":{
+        "post":{
+            "tags" : ["Admin"],
+            "summary":"Login to System",
+            "parameters":[
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "description" : "Your Account",
+                    "required": true,
+                    "schema" :{
+                      "type": "object",
+                        "properties":{
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "role": {
+                              "type": "string"
+                          }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/UserResponse"
+                        }
+                }
+            }
+        }
+    },
+      "/admin/register":{
           "post":{
-              "tags" : ["User"],
+              "tags" : ["Admin"],
+              "Access-Control-Allow-Headers":"Content-Type",
               "summary":"Add New User",
               "parameters":[
                   {
@@ -110,6 +149,73 @@
               }
           }
       },
+      "/admin/delete-admin/{id}" :{
+        "delete" :{
+            "tags" : ["Admin"],
+            "summary" : "Delete Order With ID",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":"ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                }],
+            "responses":{
+                "success" : {
+                    "message": "OK",
+                    "description" : "Admin is successful deleted"
+                }
+            }
+        }
+    },
+    "/admin/update-admin/{id}":{
+        "put":{
+            "tags" : ["Admin"],
+            "summary":"Update Admin in System",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":" ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                },
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "name": {
+                                "type": "string"
+                            },
+                            "image":{
+                                "type":"string"
+                            },
+                            "role":{
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/product"
+                        }
+                }
+            }
+        }
+    },
       "/auth/login":{
           "post":{
               "tags" : ["User"],
@@ -121,62 +227,17 @@
                       "description" : "Your Account",
                       "required": true,
                       "schema" :{
-                          "properties":{
-                              "username": {
-                                  "type": "string"
-                              },
-                              "password": {
-                                  "type": "string"
-                              }
-                          }
-                      }
-                  }
-
-              ],
-              "responses":{
-                  "200":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/UserResponse"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/user/update/{userID}":{
-          "put":{
-              "tags" : ["User"],
-              "summary":"Update User in System",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"userID",
-                      "description":"User ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  },
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Account",
-                      "required": true,
-                      "schema" :{
+                        "type": "object",
                           "properties":{
                               "email": {
                                   "type": "string"
                               },
-                              "address":{
-                                  "type":"string"
+                              "password": {
+                                  "type": "string"
                               },
-                              "phone":{
-                                  "type":"string"
-                              },
-                              "url":{
-                                  "type":"string"
-                              }
+                              "role": {
+                                "type": "string"
+                            }
                           }
                       }
                   }
@@ -193,369 +254,61 @@
               }
           }
       },
-      "/api/user/update_cart/{id}":{
-          "put":{
-              "tags" : ["User"],
-              "summary":"Update Cart For User In System",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"id",
-                      "description":"User ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  },
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Account",
-                      "required": true,
-                      "schema" :{
-                          "properties":{
-                              "cartID": {
-                                  "type": "string"
-                              }
-                          }
-                      }
-                  }
+      "/auth/register":{
+        "post":{
+            "tags" : ["User"],
+            "Access-Control-Allow-Headers":"Content-Type",
+            "summary":"Add New User",
+            "parameters":[
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "description" : "Your Username",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "email": {
+                                "type": "string",
+                                "example": "patientttt-1@gmail.com"
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "1234567889"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "1234567889"
+                            },
+                            "role": {
+                                "type": "string",
+                                "example": "patient"
+                            }
+                        }
+                    }
+                }
 
-              ],
-              "responses":{
-                  "200":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/UserResponse"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/product/" :{
-          "get" :{
-              "tags" : ["Product"],
-              "summary" : "Get All Products",
-              "responses":{
-                  "200" : {
-                      "message": "OK",
-                      "description" : "OK",
-                      "schema":{
-                          "$ref" :  "#/definitions/product"
-                      }
-                  }
-              }
-          }
-      },
-      "/api/product/add_product":{
-          "post":{
-              "tags" : ["Product"],
-              "summary":"Add One Product",
-              "parameters":[
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Username",
-                      "required": true,
-                      "schema" :{
-                          "properties":{
-                              "id": {
-                                  "type": "string"
-                              },
-                              "name":{
-                                  "type":"string"
-                              },
-                              "image":{
-                                  "type":"string"
-                              },
-                              "price":{
-                                  "type":"string"
-                              },
-                              "numberOnSale":{
-                                  "type":"integer"
-                              }
-                          }
-                      }
-                  }
-              ],
-              "responses":{
-                  "200":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/product"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/product/update/{id}":{
-          "put":{
-              "tags" : ["Product"],
-              "summary":"Update Product in System",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"id",
-                      "description":"Product ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  },
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Product",
-                      "required": true,
-                      "schema" :{
-                          "properties":{
-                              "name": {
-                                  "type": "string"
-                              },
-                              "image":{
-                                  "type":"string"
-                              },
-                              "price":{
-                                  "type":"string"
-                              }
-                          }
-                      }
-                  }
-
-              ],
-              "responses":{
-                  "200":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/product"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/order/" :{
-          "get" :{
-              "tags" : ["Orders"],
-              "summary" : "Get All Orders",
-              "responses":{
-                  "200" : {
-                      "message": "OK",
-                      "description" : "OK",
-                      "schema":{
-                          "$ref" :  "#/definitions/orders"
-                      }
-                  }
-              }
-          }
-      },
-      "/api/order/statistic/months/{month}" :{
-          "get" :{
-              "tags" : ["Orders"],
-              "summary" : "Get Data Statistic Order Below Months ",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"month",
-                      "description":"Month Statistic",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  }],
-              "responses":{
-                  "200" : {
-                      "message": "OK",
-                      "description" : "OK"
-                  }
-              }
-          }
-      },
-      "/api/order/get_ord/{orderid}" :{
-          "get" :{
-              "tags" : ["Orders"],
-              "summary" : "Get Order With ID",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"orderid",
-                      "description":"Order ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  }],
-              "responses":{
-                  "200" : {
-                      "message": "OK",
-                      "description" : "OK",
-                      "schema":{
-                          "$ref" :  "#/definitions/orders"
-                      }
-                  }
-              }
-          }
-      },
-      "/api/order/find_order_cus/{customerid}" :{
-          "get" :{
-              "tags" : ["Orders"],
-              "summary" : "Get User have ID",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"customerid",
-                      "description":"Customer ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  }],
-              "responses":{
-                  "200" : {
-                      "message": "OK",
-                      "description" : "OK",
-                      "schema":{
-                          "$ref" :  "#/definitions/orders"
-                      }
-                  }
-              }
-          }
-      },
-      "/api/order/add_order":{
-          "post":{
-              "tags" : ["Orders"],
-              "summary":"Add One Order",
-              "parameters":[
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Order",
-                      "required": true,
-                      "schema" :{
-                          "properties":{
-                              "orderID": {
-                                  "type": "string"
-                              },
-                              "customerID": {
-                                  "type": "string"
-                              },
-                              "total": {
-                                  "type": "string"
-                              },
-                              "shippingData": {
-                                  "type":"object",
-                                  "properties":
-                                  {
-                                      "firstName":{"type":"string"},
-                                      "lastName":{"type":"string"},
-                                      "email":{"type":"string"},
-                                      "phone" :{"type":"string"},
-                                      "city":{"type":"string"},
-                                      "district":{"type":"string"},
-                                      "ward":{"type":"string"},
-                                      "address":{"type":"string"}
-                                  }
-                              },
-                              "date":{
-                                  "type":"string"
-                              },
-                              "status":{
-                                  "type":"string"
-                              },
-                              "dateSort":{
-                                  "type": "string"
-                              },
-                              "statistic":{
-                                  "type":"boolean"
-                              }
-                          }
-                      }
-                  }
-              ],
-              "responses":{
-                  "success":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/orders"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/order/update_status/{ordid}":{
-          "put":{
-              "tags" : ["Orders"],
-              "summary":"Update Order Status",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"ordid",
-                      "description":"Order ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  },
-                  {
-                      "name": "body",
-                      "in" : "body",
-                      "description" : "Your Product",
-                      "required": true,
-                      "schema" :{
-                          "properties":{
-                              "status": {
-                                  "type": "string"
-                              }
-                          }
-                      }
-                  }
-
-              ],
-              "responses":{
-                  "200":{
-                          "message": "OK",
-                          "description" : "OK",
-                          "schema":{
-                              "$ref" :  "#/definitions/orders"
-                          }
-                  }
-              }
-          }
-      },
-      "/api/order/delete/{orderid}" :{
-          "delete" :{
-              "tags" : ["Orders"],
-              "summary" : "Delete Order With ID",
-              "parameters":[
-                  {
-                      "in":"path",
-                      "name":"orderid",
-                      "description":"Order ID",
-                      "required": true,
-                      "schema":{
-                          "type":"string"
-                      }
-                  }],
-              "responses":{
-                  "success" : {
-                      "message": "OK",
-                      "description" : "Your order is successful deleted"
-                  }
-              }
-          }
-      }
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/UserResponse"
+                        }
+                }
+            }
+        }
+    }
   },
   "definitions" : {
       "user" : {
-          "required" : ["userID","username","password"],
+        "type": "object",
+          "required" : ["email","password"],
           "properties" : {
               "_id" : {
                   "type" : "string"
               },
-              "userID": {
+              "role": {
                   "type": "string"
               },
               "username": {
@@ -566,29 +319,14 @@
               },
               "email": {
                   "type": "string"
-              },
-              "login_type": {
-                  "type": "string"
-              },
-              "url": {
-                  "type": "string"
-              },
-              "cartID": {
-                  "type": "string"
-              },
-              "user_type":{
-                  "type":"string"
               }
           }
       },
       "admin" : {
-        "required" : ["userID","username","password"],
+        "required" : ["username","password"],
         "properties" : {
             "_id" : {
                 "type" : "string"
-            },
-            "userID": {
-                "type": "string"
             },
             "username": {
                 "type": "string"
@@ -598,84 +336,27 @@
             },
             "email": {
                 "type": "string"
-            },
-            "login_type": {
-                "type": "string"
-            },
-            "url": {
-                "type": "string"
-            },
-            "cartID": {
-                "type": "string"
-            },
-            "user_type":{
-                "type":"string"
             }
         }
     },
-      "product" : {
-          "required" : ["id","name","price"],
+    "doctor" : {
+        "type": "object",
+          "required" : ["email","password"],
           "properties" : {
               "_id" : {
                   "type" : "string"
               },
-              "id": {
+              "role": {
                   "type": "string"
               },
-              "name": {
+              "username": {
                   "type": "string"
               },
-              "image": {
+              "password": {
                   "type": "string"
               },
-              "price": {
+              "email": {
                   "type": "string"
-              },
-              "numberOnSale":{
-                  "type": "integer"
-              }
-          }
-      },
-      "orders" : {
-          "required" : ["orderID","customerID"],
-          "properties" : {
-              "_id" : {
-                  "type" : "string"
-              },
-              "orderID": {
-                  "type": "string"
-              },
-              "customerID": {
-                  "type": "string"
-              },
-              "total": {
-                  "type": "string"
-              },
-              "shippingData": {
-                  "type":"object",
-                  "properties":
-                  {
-                      "firstName":{"type":"string"},
-                      "lastName":{"type":"string"},
-                      "email":{"type":"string"},
-                      "phone" :{"type":"string"},
-                      "city":{"type":"string"},
-                      "district":{"type":"string"},
-                      "ward":{"type":"string"},
-                      "address":{"type":"string"}
-                  }
-              },
-              "date":{
-                  "type":"string"
-              },
-              "status":{
-                  "type":"string"
-              },
-              "dateSort":{
-                  "type": "string"
-              },
-              "statistic":{
-                  "type":"boolean"
               }
           }
       },
@@ -701,6 +382,19 @@
                 "type" : "array",
                 "items" : {
                     "$ref" :"#/definitions/admin"
+                }
+            }
+        }
+    },
+    "DoctorResponse" : {
+        "properties" : {
+            "message" : {
+                "type" : "String"
+            },
+            "data" : {
+                "type" : "array",
+                "items" : {
+                    "$ref" :"#/definitions/doctor"
                 }
             }
         }
