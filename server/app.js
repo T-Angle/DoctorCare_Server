@@ -4,9 +4,13 @@ const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
 const fileUpload = require('express-fileupload')
+const dotenv  = require ("dotenv");
+
+dotenv.config();
+
 
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./api.json');
 
 
 const app = express()
@@ -31,11 +35,11 @@ const adminRoute = require('./api/routes/admin')
 const clientRoute = require('./api/routes/client')
 
 // API URL's
-app.use('/api/v1/auth', authRoute)
+app.use('/api/v1/auth', authRoute) //
 app.use('/api/v1/doctor', doctorRoute)
 app.use('/api/v1/patient', patientRoute)
-app.use('/api/v1/chat', chatRoute)
-app.use('/api/v1/admin', adminRoute)
+// app.use('/api/v1/chat', chatRoute)
+app.use('/api/v1/admin', adminRoute) //
 app.use('/api/v1/client', clientRoute)
 
 
@@ -46,7 +50,7 @@ app.get('/', (req, res) => {
 
 
 mongoose.connect(
- "mongodb+srv://PomanJr:PomanJr@cluster0.cwqxjni.mongodb.net/DoctorApp",
+    process.env.MONGO_URI,
     { useNewUrlParser: true, useUnifiedTopology: true },
     (err) => {
         if (!err) {

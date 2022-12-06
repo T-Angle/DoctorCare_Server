@@ -14,9 +14,9 @@ router.get('/auth/logout', AuthController.Logout)
 router.get('/doctor', DoctorController.Index)
 router.get('/doctor/:id/show', DoctorController.Show)
 router.put('/doctor/:id/account/update/:status', DoctorController.UpdateStatus)
-router.delete('/admin/:id/delete', DoctorController.DeleteAdmin)
-router.put('/admin/:id/update', DoctorController.UpdateInfoAdmin)
-router.delete('/doctor/:id/delete', DoctorController.DeleteDoctor)
-router.put('/doctor/:id/update', DoctorController.UpdateInfoDoctor)
+router.delete('/delete-admin/:id', DoctorController.DeleteAdmin)
+router.put('/update-admin/:id', DoctorController.UpdateInfoAdmin)
+router.delete('/delete-doctor/:id', DoctorController.DeleteDoctor)
+router.put('/update-doctor/:id', DoctorController.UpdateInfoDoctor)
 
 module.exports = router

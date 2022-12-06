@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://api.alodoctor.space/api/v1"
+      "url": "https://api.alodoctor.space/api/v1"
     }
   ],
   "tags" : [
@@ -20,7 +20,7 @@
           "description" : " Online-Doctor-Appointment API"
       }
   ],
-  "schemes": ["http"],
+  "schemes": ["https"],
   "consumes": ["application/json"],
   "produces" : ["application/json"],
   "paths" : {
