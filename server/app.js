@@ -72,7 +72,7 @@ const server = app.listen(port, () => {
 // -----------------------------App dem so thu tu gap bac si
 const io = require('socket.io')(server, {
   cors: {
-    orgin: '*',
+    orgin: 'http://localhost:3000',
     methods: ['GET', 'POST']
   }
 })
@@ -290,6 +290,7 @@ app.post('/api/v1/appointment-app/doctor/enqueue', (req, res) => {
   // update patient sesstion status
   const patientSession = patientSessionMap.get(data.appid)
   patientSession.isQueue = true
+  console.log('patient session after enqueue', patientSession)
   const patientSocketId = clientMap.get(data.appid)
   io.to(patientSocketId).emit('update_session')
   res.send(data)
