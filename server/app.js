@@ -72,7 +72,7 @@ const server = app.listen(port, () => {
 // -----------------------------App dem so thu tu gap bac si
 const io = require('socket.io')(server, {
   cors: {
-    orgin: 'http://localhost:3000',
+    orgin: '*',
     methods: ['GET', 'POST']
   }
 })
