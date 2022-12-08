@@ -3,11 +3,14 @@
 
 const express = require('express')
 const router = express.Router()
-const io = require('../../app')
+const {io, onConnection, clientMap} = require('../../app')
+
+
+
+console.log('object: ', io, onConnection, clientMap);
 
 
 const sessionMap = new Map();
-const clientMap = new Map();
 
 // api lay ra queue cua 1 bac si
 router.get('/:doctorid/queue', (req, res) => {
