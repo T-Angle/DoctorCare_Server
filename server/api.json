@@ -1,0 +1,724 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+      "version" : "1.0.1",
+      "title": "API - Online-Doctor-Appointment - OpenAPI 3.0",
+      "description": "This is a documentation of Online-Doctor-Appointment",
+      "license" : {
+          "name" : "MIT",
+          "url":"https://opensource.org/licenses/MIT"
+      }
+  },
+  "servers": [
+    {
+      "url": "http://api.alodoctor.space/api/v1"
+    }
+  ],
+  "tags" : [
+      {
+          "name" : " Online-Doctor-Appointment",
+          "description" : " Online-Doctor-Appointment API"
+      }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces" : ["application/json"],
+  "paths" : {
+      "/admin/doctor" :{
+          "get" :{
+              "tags" : ["Admin"],
+              "summary" : "Get All Doctors",
+              "Access-Control-Allow-Headers":"Content-Type",
+              "responses":{
+                  "200" : {
+                      "message": "OK",
+                      "description" : "OK",
+                      "schema":{
+                          "$ref" :  "#/definitions/UserResponse"
+                      }
+                  }
+              }
+          }
+      },
+      "/admin/doctor/{id}/show" :{
+          "get" :{
+              "tags" : ["Admin"],
+              "summary" : "Get Doctor have ID",
+              "parameters":[
+                  {
+                      "in":"path",
+                      "name":"id",
+                      "description":"User ID",
+                      "required": true,
+                      "example": "637b55f03c9ad75f2159dac3",
+                      "schema":{
+                          "type":"string"
+                      }
+                  }],
+              "responses":{
+                  "200" : {
+                      "message": "OK",
+                      "description" : "OK",
+                      "schema":{
+                          "$ref" :  "#/definitions/UserResponse"
+                      }
+                  }
+              }
+          }
+      },
+      "/admin/auth/login":{
+        "post":{
+            "tags" : ["Admin"],
+            "summary":"Login to System",
+            "parameters":[
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "description" : "Your Account",
+                    "required": true,
+                    "schema" :{
+                      "type": "object",
+                        "properties":{
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "role": {
+                              "type": "string"
+                          }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/UserResponse"
+                        }
+                }
+            }
+        }
+    },
+      "/admin/auth/register":{
+          "post":{
+              "tags" : ["Admin"],
+              "Access-Control-Allow-Headers":"Content-Type",
+              "summary":"Add New User",
+              "parameters":[
+                  {
+                      "name": "body",
+                      "in" : "body",
+                      "description" : "Your Username",
+                      "required": true,
+                      "schema" :{
+                          "properties":{
+                              "email": {
+                                  "type": "string",
+                                  "example": "patientttt-1@gmail.com"
+                              },
+                              "password": {
+                                  "type": "string",
+                                  "example": "1234567889"
+                              },
+                              "name": {
+                                  "type": "string",
+                                  "example": "1234567889"
+                              },
+                              "role": {
+                                  "type": "string",
+                                  "example": "patient"
+                              }
+                          }
+                      }
+                  }
+
+              ],
+              "responses":{
+                  "200":{
+                          "message": "OK",
+                          "description" : "OK",
+                          "schema":{
+                              "$ref" :  "#/definitions/AdminResponse"
+                          }
+                  }
+              }
+          }
+      },
+      "/admin/delete-admin/{id}" :{
+        "delete" :{
+            "tags" : ["Admin"],
+            "summary" : "Delete Admin With ID",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":"ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                }],
+            "responses":{
+                "success" : {
+                    "message": "OK",
+                    "description" : "Admin is successful deleted"
+                }
+            }
+        }
+    },
+    "/admin/update-admin/{id}":{
+        "put":{
+            "tags" : ["Admin"],
+            "summary":"Update Admin in System",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":" ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                },
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "name": {
+                                "type": "string"
+                            },
+                            "image":{
+                                "type":"string"
+                            },
+                            "role":{
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/product"
+                        }
+                }
+            }
+        }
+    },
+      "/auth/login":{
+          "post":{
+              "tags" : ["User"],
+              "summary":"Login to System",
+              "parameters":[
+                  {
+                      "name": "body",
+                      "in" : "body",
+                      "description" : "Your Account",
+                      "required": true,
+                      "schema" :{
+                        "type": "object",
+                          "properties":{
+                              "email": {
+                                  "type": "string"
+                              },
+                              "password": {
+                                  "type": "string"
+                              },
+                              "role": {
+                                "type": "string"
+                            }
+                          }
+                      }
+                  }
+
+              ],
+              "responses":{
+                  "200":{
+                          "message": "OK",
+                          "description" : "OK",
+                          "schema":{
+                              "$ref" :  "#/definitions/UserResponse"
+                          }
+                  }
+              }
+          }
+      },
+      "/auth/register":{
+        "post":{
+            "tags" : ["User"],
+            "Access-Control-Allow-Headers":"Content-Type",
+            "summary":"Add New User",
+            "parameters":[
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "description" : "Your Username",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "email": {
+                                "type": "string",
+                                "example": "patientttt-1@gmail.com"
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "1234567889"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "1234567889"
+                            },
+                            "role": {
+                                "type": "string",
+                                "example": "patient"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/UserResponse"
+                        }
+                }
+            }
+        }
+    },
+    "/doctor/profile/:id/update":{
+        "put":{
+            "tags" : ["Doctor"],
+            "summary":"Update doctor info in System",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":" ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                },
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "name": {
+                                "type": "string"
+                            },
+                            "password":{
+                                "type":"string"
+                            },
+                            "college":{
+                                "type":"string"
+                            },
+                            "passingYear":{
+                                "type":"Date"
+                            },
+                            "specialist": {
+                                "type": "String"
+                            },
+                            "currentHospital": {
+                                "type": "String"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/DoctorResponse"
+                        }
+                }
+            }
+        }
+    },
+    "/doctor/appointment/{id}/requests" :{
+        "get" :{
+            "tags" : ["Doctor"],
+            "summary" : "Get appointment have ID",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":"User ID",
+                    "required": true,
+                    "example": "637b55f03c9ad75f2159dac3",
+                    "schema":{
+                        "type":"string"
+                    }
+                }],
+            "responses":{
+                "200" : {
+                    "message": "OK",
+                    "description" : "OK",
+                    "schema":{
+                        "$ref" :  "#/definitions/DoctorResponse"
+                    }
+                }
+            }
+        }
+    },
+    "/doctor/appointment/{id}/approved" :{
+        "get" :{
+            "tags" : ["Doctor"],
+            "summary" : "Get appointment have ID",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":"User ID",
+                    "required": true,
+                    "example": "637b55f03c9ad75f2159dac3",
+                    "schema":{
+                        "type":"string"
+                    }
+                }],
+            "responses":{
+                "200" : {
+                    "message": "OK",
+                    "description" : "OK",
+                    "schema":{
+                        "$ref" :  "#/definitions/DoctorResponse"
+                    }
+                }
+            }
+        }
+    },
+    "/doctor/approved":{
+        "put":{
+            "tags" : ["Doctor"],
+            "summary":"Update doctor info in System",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":" ID",
+                    "required": true,
+                    "schema":{
+                        "type":"string"
+                    }
+                },
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "appointmentId": {
+                                "type": "string"
+                            },
+                            "day":{
+                                "type":"string"
+                            },
+                            "startTime":{
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/DoctorResponse"
+                        }
+                }
+            }
+        }
+    },
+    "/patien/appointment/request/{id}/index" :{
+        "get" :{
+            "tags" : ["Patient"],
+            "summary" : "Get appointment have request",
+            "parameters":[
+                {
+                    "in":"path",
+                    "name":"id",
+                    "description":"Appointment ID",
+                    "required": true,
+                    "example": "637b55f03c9ad75f2159dac3",
+                    "schema":{
+                        "type":"string"
+                    }
+                }],
+            "responses":{
+                "200" : {
+                    "message": "OK",
+                    "description" : "OK",
+                    "schema":{
+                        "$ref" :  "#/definitions/AppointmentResponse"
+                    }
+                }
+            }
+        }
+    },
+    "/patien/appointment/request":{
+        "post":{
+            "tags" : ["Patient"],
+            "Access-Control-Allow-Headers":"Content-Type",
+            "summary":"Add New User",
+            "parameters":[
+                {
+                    "name": "body",
+                    "in" : "body",
+                    "description" : "Your Username",
+                    "required": true,
+                    "schema" :{
+                        "properties":{
+                            "doctorId": {
+                                "type": "string"
+                            },
+                            "patientId": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "phone": {
+                                "type": "string"
+                            },
+                            "age": {
+                                "type": "string"
+                            },
+                            "height": {
+                                "type": "string"
+                            },
+                            "weight": {
+                                "type": "string"
+                            },
+                            "bloodPressure": {
+                                "type": "string"
+                            },
+                            "problemShortInfo": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+
+            ],
+            "responses":{
+                "200":{
+                        "message": "OK",
+                        "description" : "OK",
+                        "schema":{
+                            "$ref" :  "#/definitions/PatientResponse"
+                        }
+                }
+            }
+        }
+    }
+  },
+  "definitions" : {
+      "user" : {
+        "type": "object",
+          "required" : ["email","password"],
+          "properties" : {
+              "_id" : {
+                  "type" : "string"
+              },
+              "role": {
+                  "type": "string"
+              },
+              "username": {
+                  "type": "string"
+              },
+              "password": {
+                  "type": "string"
+              },
+              "email": {
+                  "type": "string"
+              }
+          }
+      },
+      "admin" : {
+        "required" : ["username","password"],
+        "properties" : {
+            "_id" : {
+                "type" : "string"
+            },
+            "username": {
+                "type": "string"
+            },
+            "password": {
+                "type": "string"
+            },
+            "email": {
+                "type": "string"
+            }
+        }
+    },
+    "doctor" : {
+        "type": "object",
+          "required" : ["email","password"],
+          "properties" : {
+              "_id" : {
+                  "type" : "string"
+              },
+              "name": {
+                "type": "string"
+            },
+            "password":{
+                "type":"string"
+            },
+            "college":{
+                "type":"string"
+            },
+            "passingYear":{
+                "type":"Date"
+            },
+            "specialist": {
+                "type": "String"
+            },
+            "currentHospital": {
+                "type": "String"
+            }
+          }
+      },
+      "patient" : {
+        "type": "object",
+          "properties" : {
+              "_id" : {
+                  "type" : "string"
+              },
+              "doctorId": {
+                "type": "string"
+            },
+            "patientId": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string"
+            },
+            "phone": {
+                "type": "string"
+            },
+            "age": {
+                "type": "string"
+            },
+            "height": {
+                "type": "string"
+            },
+            "weight": {
+                "type": "string"
+            },
+            "bloodPressure": {
+                "type": "string"
+            },
+            "problemShortInfo": {
+                "type": "string"
+            }
+          }
+      },
+      "appointment" : {
+        "type": "object",
+          "properties" : {
+              "_id" : {
+                  "type" : "string"
+              },
+              "doctor": {
+                "type": "string"
+            },
+            "patientId":{
+                "type":"string"
+            },
+            "status":{
+                "type":"string"
+            },
+            "schedule":{
+                "type":"Date"
+            }
+          }
+      },
+      
+      "UserResponse" : {
+          "properties" : {
+              "message" : {
+                  "type" : "String"
+              },
+              "data" : {
+                  "type" : "array",
+                  "items" : {
+                      "$ref" :"#/definitions/user"
+                  }
+              }
+          }
+      },
+      "AdminResponse" : {
+        "properties" : {
+            "message" : {
+                "type" : "String"
+            },
+            "data" : {
+                "type" : "array",
+                "items" : {
+                    "$ref" :"#/definitions/admin"
+                }
+            }
+        }
+    },
+    "PatientResponse" : {
+        "properties" : {
+            "message" : {
+                "type" : "String"
+            },
+            "data" : {
+                "type" : "array",
+                "items" : {
+                    "$ref" :"#/definitions/patient"
+                }
+            }
+        }
+    },
+    "DoctorResponse" : {
+        "properties" : {
+            "message" : {
+                "type" : "String"
+            },
+            "data" : {
+                "type" : "array",
+                "items" : {
+                    "$ref" :"#/definitions/doctor"
+                }
+            }
+        }
+    },
+    "AppointmentResponse" : {
+        "properties" : {
+            "message" : {
+                "type" : "String"
+            },
+            "data" : {
+                "type" : "array",
+                "items" : {
+                    "$ref" :"#/definitions/appointment"
+                }
+            }
+        }
+    }
+  }
+}

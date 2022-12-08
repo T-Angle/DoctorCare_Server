@@ -1,44 +1,98 @@
-
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
-const cors = require('cors')
-// const bodyParser = require('body-parser')
+const express = require("express")
+const cors = require("cors")
+const morgan = require("morgan")
+const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
+const fileUpload = require('express-fileupload')
+const dotenv  = require ("dotenv");
+
+dotenv.config();
+
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./api.json');
+
+
+const app = express()
+app.use(morgan('dev'))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+app.use(cors({origin: '*'}))
+app.use(fileUpload())
 
-// Start------------chat server-------------------//
-// config chat server
-const http = require('http')
-const { Server } = require('socket.io')
-const server = http.createServer(app)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const io = new Server(server, {
+
+app.use('/uploads/doctor/profiles', express.static('uploads/doctor/profiles/'))
+app.use('/uploads/patient/profiles', express.static('uploads/patient/profiles/'))
+
+// Main Routes
+const authRoute = require('./api/routes/auth')
+const doctorRoute = require('./api/routes/doctor')
+const patientRoute = require('./api/routes/patient')
+// const chatRoute = require('./api/routes/chat')
+const adminRoute = require('./api/routes/admin')
+const clientRoute = require('./api/routes/client')
+
+// API URL's
+app.use('/api/v1/auth', authRoute) //
+app.use('/api/v1/doctor', doctorRoute)
+app.use('/api/v1/patient', patientRoute)
+// app.use('/api/v1/chat', chatRoute)
+app.use('/api/v1/admin', adminRoute) //
+app.use('/api/v1/client', clientRoute)
+
+
+
+app.get('/', (req, res) => {
+    res.send("Hello I am node.js application")
+})
+
+
+mongoose.connect(
+  process.env.MONGO_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err) => {
+    if (!err) {
+      console.log("MongoDB Connection Succeeded.");
+    } else {
+      console.log("Error in DB connection : " + err);
+    }
+  }
+);
+
+
+// App Port
+const port = process.env.PORT || 8080
+const server = app.listen(port, () => {
+  console.log(`App running on ${port} port`)
+})
+
+// #region app dem so
+// -----------------------------App dem so thu tu gap bac si
+const io = require('socket.io')(server, {
   cors: {
     orgin: 'http://localhost:3000',
     methods: ['GET', 'POST']
   }
 })
 
-//  listen to client for msg
 //  <doctorId, session> map hang doi benh nhan cua cac bac si
 const sessionMap = new Map()
 // <appointment id, socket> danh sach cac client benh nhan connect toi socket server
 const clientMap = new Map()
 
-// const patientQueueHandler = require('./socketHandler/patientQueueHandler.js')
 
 const onConnection = (socket) => {
   console.log(`new user connected, new socket id = ${socket.id}`)
-  // chi co bac si moi goi enqueue va dequeue
-  // them client vao room cua bac si
-  // patientQueueHandler(io, socket, sessionMap, clientMap)
+
+  socket.on('enter_pool', (appId) => {
+    clientMap.set(appId, socket.id)
+    console.log('updated client map now: ', clientMap)
+  })
 }
 
 io.on('connection', onConnection)
-// ---------------------------------------------------End
 
 // api lay ra queue cua 1 bac si
 app.get('/api/v1/appointment-app/:doctorid/queue', (req, res) => {
@@ -54,24 +108,9 @@ app.get('/api/v1/appointment-app/:doctorid/queue', (req, res) => {
 // -------------api goi appointment data ---------------//
 
 const patientSessionMap = new Map() // k=appid, v=sessoin obj
-// const patientSession = {
-//   step: Number,
-//   order: Number,
-//   currOrder: Number
-// }
+
 const patientRecordMap = new Map() // k=appid, v=record obj
-// const test = {
-//   name: String,
-//   doctorId: String,
-//   room: String,
-//   content: String,
-//   finsh: Boolean
-// }
-// const patientRcord = {
-//   total: Number,
-//   testList: [test],
-//   drugList: [String]
-// }
+
 const addTestContent = (appId, doctorId, content) => {
   console.log('received appid', Number(appId))
   console.log( typeof (Number(appId)))
@@ -236,11 +275,7 @@ const dequeuePatient = (doctorId, sessionMap, clientMap, io) => {
   // io.to(patientSocketId).emit('queue_finished', true)
   return doctorSession.currOrder
 }
-const path = require('path')
-// import { Blob } from 'buffer'
 
-const Appointment = require('./models/Appointment')
-const Doctor = require('./models/Doctor')
 
 // them bn vao queue cua session
 app.post('/api/v1/appointment-app/doctor/enqueue', (req, res) => {
@@ -342,6 +377,7 @@ app.post('/api/v1/appointment-app/doctor/create-record', (req, res) => {
   }
   res.sendStatus(404)
 })
+
 app.post('/api/v1/appointment-app/doctor/finish-test', (req, res) => {
   const data = req.body
   console.log('create test from data ', data)
@@ -358,55 +394,4 @@ app.post('/api/v1/appointment-app/doctor/finish-test', (req, res) => {
   }
   res.sendStatus(404)
 })
-
-// lay thong in cuoc hen
-app.get('/api/v1/appointment-app/:id', (req, res) => {
-  const appId = req.params.id
-  console.log(appId)
-  Appointment.findById(appId, (err, app) => {
-    if (err) console.error(err);
-    res.send(app)
-  })
-})
-
-// lay thong tin bac si cua cuoc hen
-app.get('/api/v1/appointment-app/:id/doctor', (req, res) => {
-  const appId = req.params.id
-  console.log(appId)
-  Appointment.findById(appId, async (err, app) => {
-    if (err) console.error(err);
-    console.log(app.doctor)
-    const doctorId = app.doctor
-    const doctor = await Doctor.findById(doctorId, { name: 1, role: 1, college: 1, image: 1 })
-    res.send(doctor)
-  })
-})
-// lay hinh avatar cua bac si
-app.get('/api/v1/appointment-app/doctor/:doctorid/img', async (req, res) => {
-  const doctorId = req.params.doctorid
-  console.log(doctorId)
-  const data = await Doctor.findById(doctorId, { image: 1 })
-  const imgURL = data.image
-  console.log(imgURL)
-  // const imgFile = new Blob(path.resolve(imgURL), {type: 'image/png'})
-  res.sendFile(path.resolve('uploads/doctor/profiles/' + imgURL))
-})
-
-// yeu cau room id
-
-//  ---------connect mongo------- //
-mongoose.connect(
-  'mongodb+srv://PomanJr:PomanJr@cluster0.cwqxjni.mongodb.net/DoctorApp',
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err) => {
-    if (!err) {
-      console.log('MongoDB Connection Succeeded.');
-    } else {
-      console.log('Error in DB connection : ' + err);
-    }
-  }
-);
-
-server.listen(8080, () => {
-  console.log('Server running on port 8080')
-})
+// #endregion
